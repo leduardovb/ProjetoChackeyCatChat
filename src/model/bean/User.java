@@ -11,10 +11,11 @@ public class User {
         
     }
     
-    public User(String userLogin, String userPassword, String userNick) {
+    public User(String userLogin, String userPassword, String userNick , Boolean status) {
         this.userLogin = userLogin;
         this.userPassword = userPassword;
         this.userNick = userNick;
+        this.status = status;
     }
     
     public Integer getUserId() {
