@@ -2,8 +2,6 @@ package model.dao;
 
 import connection.ConnectionFactory;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.bean.User;
 
 public class UserDAO {
@@ -21,7 +19,7 @@ public class UserDAO {
             stmt.executeUpdate();
             System.out.println("Insert Concluido");
         } catch (SQLException ex) {
-            System.out.println("Erro: " + ex);;
+            System.out.println("Erro: " + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt);
         }
@@ -42,7 +40,7 @@ public class UserDAO {
                 us = resultSet.getString("USUARIO_LOGIN");
                 pa = resultSet.getString("USUARIO_SENHA");
             }
-            
+      
             return us.equals(user) && pa.equals(password);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
