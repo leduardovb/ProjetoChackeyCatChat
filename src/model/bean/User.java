@@ -7,6 +7,16 @@ public class User {
     private String userNick;
     private Boolean status;
 
+    public User() {
+        
+    }
+    
+    public User(String userLogin, String userPassword, String userNick) {
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+        this.userNick = userNick;
+    }
+    
     public Integer getUserId() {
         return userId;
     }

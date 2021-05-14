@@ -6,19 +6,19 @@ import java.util.logging.Logger;
 
 
 public class ConnectionFactory {
-    private Connection con = null;
+    private static Connection con = null;
     private static String URL = "jdbc:sqlserver://DESKTOP-B9IM94A:1433;databaseName=CHAKEYCATCHAT";
-    private String dataBaseUserName = "sa";
-    private String dataBasePassword = "201025";
+    private static String dataBaseUserName = "sa";
+    private static String dataBasePassword = "201025";
     private static String DRIVER = "com.mysql.jdbc.Driver";
-    private Statement stmt = null;
+    private static Statement stmt = null;
     private ResultSet result = null;
     
     public ConnectionFactory() throws ClassNotFoundException {
         getConnection();
     }
     
-    private void getConnection() throws ClassNotFoundException {
+    public static Connection getConnection() throws ClassNotFoundException {
         try{
             Class.forName(DRIVER);
             con = DriverManager.getConnection(URL , dataBaseUserName , dataBasePassword);
@@ -28,6 +28,6 @@ public class ConnectionFactory {
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("Erro: " + ex);
         }
-   
+        return con;
     }
 }
