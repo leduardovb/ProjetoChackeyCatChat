@@ -14,20 +14,44 @@ public class ConnectionFactory {
     private static Statement stmt = null;
     private ResultSet result = null;
     
-    public ConnectionFactory() throws ClassNotFoundException {
-        getConnection();
+    public ConnectionFactory() {
+        
     }
     
-    public static Connection getConnection() throws ClassNotFoundException {
+    public static Connection getConnection() {
         try{
             Class.forName(DRIVER);
-            con = DriverManager.getConnection(URL , dataBaseUserName , dataBasePassword);
-            stmt = con.createStatement();
-            System.out.println("Banco Conectado");
-            
+            return DriverManager.getConnection(URL , dataBaseUserName , dataBasePassword);    
         } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Erro: " + ex);
+        }
+    }
+    
+    public static void closeConnection(Connection con) {
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro: " + ex);;
+        }
+    }
+    
+    public static void closeConnection(Connection con , Statement stmt) {
+        closeConnection(con);
+        
+        try {
+            stmt.close();
+        } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
         }
-        return con;
+    }
+    
+    public static void closeConnection(Connection con , Statement stmt , ResultSet resultSet) {
+        closeConnection(con , stmt);
+        
+        try {
+            resultSet.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro: " + ex);
+        }
     }
 }
