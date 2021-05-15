@@ -9,9 +9,11 @@ public class Client implements Runnable{
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private String nick;
     
     public void start() throws IOException {
         try {
+            setNick();
             socket = new Socket("localhost" , 5555); // Criando um objeto do tipo socket e passando o ip da maquina e a porta
             clientSocket = new ClientSocket(socket);
             new Thread(this).start();
@@ -26,7 +28,7 @@ public class Client implements Runnable{
         String msg;
         
         do {
-            msg = JOptionPane.showInputDialog(null, clientSocket.getNick());
+            msg = JOptionPane.showInputDialog(null, this.nick);
             clientSocket.sendMsg(msg);
             System.out.println("Eu: " + msg);
         } while(!msg.equalsIgnoreCase("close")); 
@@ -41,13 +43,16 @@ public class Client implements Runnable{
         }
     }
     
+    public void setNick() {
+        this.nick = JOptionPane.showInputDialog(null , "Nick");
+    }
+    
     public static void main(String[] args) {
         try{
            Client client = new Client();
            client.start(); 
         } catch(IOException e) {
             System.out.println("Erro cliente: " + e);
-        }
-        
+        }       
     }
 }

@@ -18,15 +18,15 @@ public class Server {
    
     
     private void clientConnectionLoop() throws IOException {
-        
         while(true) {
             ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
             clients.add(clientSocket);
+            listarClients();
             new Thread(() -> {
                 try {
                     clientMessageLoop(clientSocket);
                 } catch (IOException ex) {
-                    System.out.println("Erro: " + ex);;
+                    System.out.println("Erro: " + ex);
                 }
             }).start();
         }
@@ -68,12 +68,22 @@ public class Server {
         }
     }
     
+    private void listarClients() {
+        Iterator<ClientSocket> iterator = clients.iterator();
+        
+        while(iterator.hasNext()) {
+            ClientSocket clientSocket = iterator.next();
+            
+            System.out.println(clientSocket.getNick());
+        }
+    }
+    
     public static void main(String[] args) {
         try {
             Server server = new Server();
             server.start();
         } catch (IOException ex) {
-            System.out.println("Erro servidor: " + ex);
+            System.out.println("Servidor Fechado");
         }
     }
 }

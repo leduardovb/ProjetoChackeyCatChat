@@ -10,6 +10,7 @@ public class Main {
         UserDAO userDAO = new UserDAO();
         
         
+        
         if(userDAO.getUserAndPassword(user.getUserLogin(), user.getUserPassword())) {
             System.out.println("Usuario Cadastrado");
         }
