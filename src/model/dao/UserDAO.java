@@ -48,4 +48,26 @@ public class UserDAO {
         
         return false;
     }
+    
+    public boolean isAlreadyUser(String user) {
+        Connection con = ConnectionFactory.getConnection();
+        
+        try {
+            Statement stmt;
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery("SELECT USUARIO_LOGIN FROM USUARIO WHERE USUARIO_LOGIN = '" + user + "'");
+            
+            String rs = null;
+            
+            while(resultSet.next()) {
+                rs = resultSet.getString("USUARIO_LOGIN");
+            }
+            
+            return rs == null;
+        } catch (SQLException ex) {
+            System.out.println("Erro: " + ex);
+        }
+        
+        return false;
+    }
 }
