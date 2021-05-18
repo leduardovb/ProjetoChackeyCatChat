@@ -15,7 +15,6 @@ public class Server {
         serverSocket = new ServerSocket(PORT);
         clientConnectionLoop();
     }
-   
     
     private void clientConnectionLoop() throws IOException {
         while(true) {
