@@ -2,6 +2,7 @@ package model.dao;
 
 import connection.ConnectionFactory;
 import java.sql.*;
+import java.util.Random;
 import model.bean.User;
 
 public class UserDAO {
@@ -69,5 +70,13 @@ public class UserDAO {
         }
         
         return false;
+    }
+    
+    public int authenticatorCod() {
+        Random alt = new Random();
+        
+        int num = alt.nextInt((9999 - 1000) + 1) - 1000 ;
+        
+        return num;
     }
 }
