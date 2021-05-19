@@ -50,7 +50,7 @@ public class User {
         this.userNick = userNick;
     }
 
-    public Boolean isStatus() {
+    public Boolean isOnline() {
         return status;
     }
 

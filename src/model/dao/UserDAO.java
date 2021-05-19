@@ -17,7 +17,7 @@ public class UserDAO {
             stmt.setString(1 , user.getUserLogin());
             stmt.setString(2 , user.getUserPassword());
             stmt.setString(3, user.getUserNick());
-            stmt.setBoolean(4, user.isStatus());
+            stmt.setBoolean(4, user.isOnline());
             stmt.executeUpdate();
             System.out.println("Insert Concluido");
         } catch (SQLException ex) {

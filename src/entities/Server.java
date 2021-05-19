@@ -82,8 +82,16 @@ public class Server {
         
         while(iterator.hasNext()) {
             User user = iterator.next();
+            String status = null;
             
-            System.out.println(user.getUserNick());
+            System.out.println("Usuário: " + user.getUserNick());
+            if(user.isOnline()) {
+                status = "Online";
+            }
+            else {
+                status = "Offline";
+            }
+            System.out.println("Status: " + status);
         }
     }
     

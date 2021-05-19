@@ -16,6 +16,7 @@ public class Client implements Runnable{
             setNick();
             socket = new Socket("localhost" , 5555); // Criando um objeto do tipo socket e passando o ip da maquina e a porta
             clientSocket = new ClientSocket(socket);
+            System.out.println("Local Add: " + socket.getLocalSocketAddress());
             new Thread(this).start();
             messageLoop(clientSocket);
         } finally {
