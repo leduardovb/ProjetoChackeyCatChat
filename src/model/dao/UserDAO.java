@@ -2,6 +2,7 @@ package model.dao;
 
 import connection.ConnectionFactory;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Random;
 import model.bean.User;
 
@@ -78,5 +79,35 @@ public class UserDAO {
         int num = alt.nextInt((9999 - 1000) + 1) - 1000 ;
         
         return num;
+    }
+    
+    public ArrayList getUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        Connection con = ConnectionFactory.getConnection();
+        
+        try {
+            Statement stmt;
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery("SELECT ID_USUARIO, NICK FROM USUARIO");
+            
+            Integer idUser;
+            String nick;
+            
+            while(resultSet.next()) {
+                User user = new User();
+                idUser = resultSet.getInt("ID_USUARIO");
+                nick = resultSet.getString("NICK");
+                
+                user.setUserId(idUser);
+                user.setUserNick(nick);
+                user.setStatus(false);
+                
+                users.add(user);
+            }
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        }
+        
+        return users;
     }
 }

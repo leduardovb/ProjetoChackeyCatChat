@@ -4,15 +4,19 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import model.bean.User;
+import model.dao.UserDAO;
 
 public class Server {
     public static final int PORT = 5555;
     private ServerSocket serverSocket;
     private final ArrayList<ClientSocket> clients = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
     
     public void start() throws IOException {
         System.out.println("Servidor iniciado na porta: " + PORT);
         serverSocket = new ServerSocket(PORT);
+        getUsers();
         clientConnectionLoop();
     }
     
@@ -20,7 +24,7 @@ public class Server {
         while(true) {
             ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
             clients.add(clientSocket);
-            listarClients();
+            connectedUsers();
             new Thread(() -> {
                 try {
                     clientMessageLoop(clientSocket);
@@ -36,7 +40,7 @@ public class Server {
         try{
             while((msg = clientSocket.getMessage()) != null){
                 if(!msg.equalsIgnoreCase("close")){
-                    System.out.printf("%s: %s\n" , clientSocket.getNick() , msg);
+                    System.out.printf("Cliente: %s\n" , msg);
                     sendMsgToAll(clientSocket , msg);
                 }
                 else{
@@ -67,13 +71,19 @@ public class Server {
         }
     }
     
-    private void listarClients() {
-        Iterator<ClientSocket> iterator = clients.iterator();
+    private void getUsers() {
+        UserDAO userDAO = new UserDAO();
+        
+        users = userDAO.getUsers();
+    }
+    
+    private void connectedUsers() {
+        Iterator<User> iterator = users.iterator();
         
         while(iterator.hasNext()) {
-            ClientSocket clientSocket = iterator.next();
+            User user = iterator.next();
             
-            System.out.println(clientSocket.getNick());
+            System.out.println(user.getUserNick());
         }
     }
     

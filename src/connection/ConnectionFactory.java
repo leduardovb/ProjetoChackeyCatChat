@@ -28,7 +28,7 @@ public class ConnectionFactory {
         try {
             con.close();
         } catch (SQLException ex) {
-            System.out.println("Erro: " + ex);;
+            System.out.println("Erro: " + ex);
         }
     }
     

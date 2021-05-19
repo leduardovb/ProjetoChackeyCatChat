@@ -171,7 +171,6 @@ public class LoginUsuario extends javax.swing.JFrame {
        
         if(ctl.getUserAndPassword(user, password)){
            JOptionPane.showMessageDialog(null, "Login aceito" , "Login" , JOptionPane.INFORMATION_MESSAGE);
-           
         }
         else{
            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorreto" , "Erro" , JOptionPane.ERROR_MESSAGE);

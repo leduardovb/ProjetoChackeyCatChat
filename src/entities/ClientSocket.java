@@ -7,7 +7,6 @@ public class ClientSocket {
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
-    private String nick;
     
     public ClientSocket(Socket socket) throws IOException {
         this.socket = socket;
@@ -26,14 +25,6 @@ public class ClientSocket {
     public boolean sendMsg(String msg) {
         out.println(msg);
         return !out.checkError();
-    }
-    
-    public String getNick() {
-        return this.nick;
-    }
-    
-    public void setNick(String nick) {
-        this.nick = nick;
     }
     
     public void close() throws IOException {
