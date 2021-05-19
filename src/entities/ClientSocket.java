@@ -27,6 +27,10 @@ public class ClientSocket {
         return !out.checkError();
     }
     
+    public SocketAddress getLocalSocketAdress() {
+        return socket.getLocalSocketAddress();
+    }
+    
     public void close() throws IOException {
         in.close();
         out.close();
