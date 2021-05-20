@@ -9,6 +9,7 @@ import model.dao.UserDAO;
 
 public class Server {
     public static final int PORT = 5555;
+    private static int clientQuantity = 0;
     private ServerSocket serverSocket;
     private final ArrayList<ClientSocket> clients = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
@@ -24,10 +25,14 @@ public class Server {
         while(true) {
             ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
             clients.add(clientSocket);
+            
+            System.out.println(users.add(clientSocket.getClient(clientQuantity)));
+            clientQuantity ++;
             connectedUsers();
             new Thread(() -> {
                 try {
-                    clientMessageLoop(clientSocket);
+                    int pos = getPosicao(clientSocket);
+                    clientMessageLoop(clientSocket , pos);
                 } catch (IOException ex) {
                     System.out.println("Erro: " + ex);
                 }
@@ -35,12 +40,12 @@ public class Server {
         }
     }
     
-    private void clientMessageLoop(ClientSocket clientSocket) throws IOException {
+    private void clientMessageLoop(ClientSocket clientSocket , int pos) throws IOException {
         String msg;
         try{
             while((msg = clientSocket.getMessage()) != null){
                 if(!msg.equalsIgnoreCase("close")){
-                    System.out.printf("Cliente: %s\n" , msg);
+                    System.out.printf("Client: %s\n" , msg);
                     sendMsgToAll(clientSocket , msg);
                 }
                 else{
@@ -55,6 +60,10 @@ public class Server {
     
     private void close() throws IOException{
         serverSocket.close();
+    }
+    
+    private int getPosicao(ClientSocket clientSocket) {
+        return clients.indexOf(clientSocket);
     }
     
     private void sendMsgToAll(ClientSocket sender , String msg) {

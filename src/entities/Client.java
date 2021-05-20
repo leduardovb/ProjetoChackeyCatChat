@@ -3,20 +3,27 @@ package entities;
 import java.io.*;
 import java.net.*;
 import javax.swing.JOptionPane;
+import model.bean.User;
 
 public class Client implements Runnable{
     private ClientSocket clientSocket;
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
     private String nick;
+    private User user;
+    
+    public Client() {
+        
+    }
+    
+    public Client(User user) {
+        this.user = user;
+    }
     
     public void start() throws IOException {
         try {
             setNick();
             socket = new Socket("localhost" , 5555); // Criando um objeto do tipo socket e passando o ip da maquina e a porta
-            clientSocket = new ClientSocket(socket);
-            System.out.println("Local Add: " + socket.getLocalSocketAddress());
+            clientSocket = new ClientSocket(socket , user);
             new Thread(this).start();
             messageLoop(clientSocket);
         } finally {
@@ -50,8 +57,10 @@ public class Client implements Runnable{
     
     public static void main(String[] args) {
         try{
-           Client client = new Client();
-           client.start(); 
+            User user = new User();
+            user.setUserNick("M O O N");
+            Client client = new Client(user);
+            client.start(); 
         } catch(IOException e) {
             System.out.println("Erro cliente: " + e);
         }       

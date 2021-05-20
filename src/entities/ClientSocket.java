@@ -2,8 +2,11 @@ package entities;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import model.bean.User;
 
 public class ClientSocket {
+    private static ArrayList<User> users = new ArrayList<>();
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
@@ -14,12 +17,23 @@ public class ClientSocket {
         this.out = new PrintWriter(socket.getOutputStream() , true); // Criando um obj do tipo pw e passando um metódo do cs que le em bytes e passando true para realizar o auto flush
     }
     
+    public ClientSocket(Socket socket , User user) throws IOException {
+        users.add(user);
+        this.socket = socket;
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+        this.out = new PrintWriter(socket.getOutputStream() , true); 
+    }
+    
     public String getMessage() {
         try {
             return in.readLine();
         }catch(IOException e) {
             return null;
         }
+    }
+    
+    public User getClient(int pos) {
+        return users.get(pos);
     }
     
     public boolean sendMsg(String msg) {
