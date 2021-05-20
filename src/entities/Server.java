@@ -26,7 +26,7 @@ public class Server {
             ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
             clients.add(clientSocket);
             
-            System.out.println(users.add(clientSocket.getClient(clientQuantity)));
+            //System.out.println(users.add(clientSocket.getClient(clientQuantity))); Erro 
             clientQuantity ++;
             connectedUsers();
             new Thread(() -> {
