@@ -27,10 +27,12 @@ public class Client implements Runnable{
             clientSocket = new ClientSocket(socket , user);
             new Thread(this).start();
             messageLoop(clientSocket);
+        } catch(IOException ex) {
+            System.out.println("Erro: " + ex);
         } finally {
             clientSocket.close();
             close();
-        }    
+        } 
     }
     
     private void messageLoop(ClientSocket clientSocket) {
@@ -60,6 +62,10 @@ public class Client implements Runnable{
         UserDAO userDAO = new UserDAO();
         
         userDAO.setStatusOff(user.getUserId());
+    }
+    
+    public User getUser(){
+        return this.user;
     }
     
     public static void main(String[] args) {

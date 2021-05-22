@@ -159,8 +159,7 @@ public class UserDAO {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("UPDATE USUARIO SET USER_STATUS = 1 WHERE ID_USUARIO = '" + id +"'");
-            
+            stmt = con.prepareStatement("UPDATE USUARIO SET USER_STATUS = 1 , ONLINE_SERVIDOR = 1 WHERE ID_USUARIO = '" + id +"'");
             stmt.executeUpdate();
             System.out.println("Usuario Online");
         } catch(SQLException ex) {
@@ -178,6 +177,52 @@ public class UserDAO {
             stmt = con.prepareStatement("UPDATE USUARIO SET USER_STATUS = 0 WHERE ID_USUARIO = '" + id +"'");
             stmt.executeUpdate();
             System.out.println("Usuario Offline");
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public User getOnlineUser() {
+        Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
+        
+        try {
+            stmt = con.createStatement();
+            resultSet = stmt.executeQuery("SELECT ID_USUARIO , NICK , USUARIO_LOGIN , USUARIO_SENHA FROM USUARIO WHERE ONLINE_SERVIDOR = 1");
+            
+            String nick = "" , userLogin = "" , userPassword = "";
+            Integer userId = 0;
+            
+            while(resultSet.next()) {
+                userId = resultSet.getInt("ID_USUARIO");
+                nick = resultSet.getString("NICK");
+                userLogin = resultSet.getString("USUARIO_LOGIN");
+                userPassword = resultSet.getString("USUARIO_SENHA");
+            }
+            
+            User user = new User(userId , userLogin , userPassword , nick , true);
+            
+            return user;
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, resultSet);
+        }
+        
+        return null;
+    }
+    
+    public void clientConnected(Integer id) {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("UPDATE USUARIO SET ONLINE_SERVIDOR = 0 WHERE ID_USUARIO = '" + id + "'");
+            stmt.executeUpdate();
+            
         } catch(SQLException ex) {
             System.out.println("Erro: " + ex);
         } finally {

@@ -27,9 +27,10 @@ public class Server {
                 ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
                 clients.add(clientSocket);
                 clientQuantity ++;
-                
                 getUsers();
                 connectedUsers();
+                onlineUsers.add(getOnlineUser());
+                clientConnected();
                 new Thread(() -> {
                     try {
                         int pos = getPosicao(clientSocket);
@@ -49,7 +50,7 @@ public class Server {
         try{
             while((msg = clientSocket.getMessage()) != null){
                 if(!msg.equalsIgnoreCase("close")){
-                    System.out.printf("Client: %s\n" , msg);
+                    System.out.printf("%s: %s\n" , onlineUsers.get(getPosicao(clientSocket)).getUserNick() , msg);
                     sendMsgToAll(clientSocket , msg);
                 }
                 else{
@@ -57,7 +58,8 @@ public class Server {
                 }
             }
         } finally{
-            clientSocket.close();
+            clientRemove(clientSocket);
+            clientSocket.close(); 
             clientQuantity --;
         }
     }
@@ -68,7 +70,7 @@ public class Server {
     
     private int getPosicao(ClientSocket clientSocket) {
         return clients.indexOf(clientSocket);
-    }
+    } 
     
     private void sendMsgToAll(ClientSocket sender , String msg) {
         Iterator<ClientSocket> iterator = clients.iterator();
@@ -77,7 +79,7 @@ public class Server {
             ClientSocket clientSocket = iterator.next();
             
             if(!clientSocket.equals(sender)) {
-                if(!clientSocket.sendMsg("Client: " + msg)){
+                if(!clientSocket.sendMsg(onlineUsers.get(getPosicao(sender)).getUserNick() + ": " + msg)){
                     iterator.remove();
                 }
             }
@@ -106,6 +108,25 @@ public class Server {
             }
             System.out.println("Status: " + status);
         }
+    }
+    
+    private User getOnlineUser() {
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getOnlineUser();
+        
+        return user;
+    }
+    
+    private void clientRemove(ClientSocket clientSocket) {
+        onlineUsers.remove(getPosicao(clientSocket));
+        clients.remove(clientSocket);
+    }
+    
+    
+    private void clientConnected() {
+        UserDAO userDAO = new UserDAO();
+        
+        userDAO.clientConnected(onlineUsers.get(clientQuantity - 1).getUserId());
     }
     
     public static void main(String[] args) {

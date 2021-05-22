@@ -26,7 +26,7 @@ public class LoginUsuario extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
 
@@ -81,6 +81,11 @@ public class LoginUsuario extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(240, 240, 240));
         jLabel5.setText("X");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel5MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,11 +183,9 @@ public class LoginUsuario extends javax.swing.JFrame {
            User us = ctl.getUser(user, password);
            
            Client client = new Client(us);
-            try {
-                client.start();
-            } catch (IOException ex) {
-                System.out.println("Erro: " + ex);
-            }  
+          
+           this.dispose();
+           TelaPrincipalChat telaPrinc = new TelaPrincipalChat(client); 
         }
         else{
            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorreto" , "Erro" , JOptionPane.ERROR_MESSAGE);
@@ -195,6 +198,10 @@ public class LoginUsuario extends javax.swing.JFrame {
         cadUser.setLocationRelativeTo(null);
         cadUser.setVisible(true);
     }//GEN-LAST:event_jLabel4MousePressed
+
+    private void jLabel5MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MousePressed
+        System.exit(0);
+    }//GEN-LAST:event_jLabel5MousePressed
     
     public static void main(String args[]) {
         try {
