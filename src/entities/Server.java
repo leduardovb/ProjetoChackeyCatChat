@@ -13,6 +13,7 @@ public class Server {
     private ServerSocket serverSocket;
     private final ArrayList<ClientSocket> clients = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<User> onlineUsers = new ArrayList<>();
     
     public void start() throws IOException {
         System.out.println("Servidor iniciado na porta: " + PORT);
@@ -22,20 +23,24 @@ public class Server {
     
     private void clientConnectionLoop() throws IOException {
         while(true) {
-            ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
-            clients.add(clientSocket);
-            //System.out.println(users.add(clientSocket.getClient(clientQuantity))); Erro 
-            clientQuantity ++;
-            getUsers();
-            connectedUsers();
-            new Thread(() -> {
-                try {
-                    int pos = getPosicao(clientSocket);
-                    clientMessageLoop(clientSocket , pos);
-                } catch (IOException ex) {
+            try{
+                ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
+                clients.add(clientSocket);
+                clientQuantity ++;
+                
+                getUsers();
+                connectedUsers();
+                new Thread(() -> {
+                    try {
+                        int pos = getPosicao(clientSocket);
+                        clientMessageLoop(clientSocket , pos);
+                    } catch (IOException ex) {
+                        System.out.println("Erro: " + ex);
+                    }
+                }).start();
+            } catch(IOException ex) {
                     System.out.println("Erro: " + ex);
-                }
-            }).start();
+            }
         }
     }
     
@@ -53,7 +58,7 @@ public class Server {
             }
         } finally{
             clientSocket.close();
-            close();
+            clientQuantity --;
         }
     }
     

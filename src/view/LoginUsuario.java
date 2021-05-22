@@ -181,8 +181,8 @@ public class LoginUsuario extends javax.swing.JFrame {
             try {
                 client.start();
             } catch (IOException ex) {
-                System.out.println("Erro: " + ex);;
-            }
+                System.out.println("Erro: " + ex);
+            }  
         }
         else{
            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorreto" , "Erro" , JOptionPane.ERROR_MESSAGE);
