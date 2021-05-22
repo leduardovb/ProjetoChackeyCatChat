@@ -17,7 +17,6 @@ public class Server {
     public void start() throws IOException {
         System.out.println("Servidor iniciado na porta: " + PORT);
         serverSocket = new ServerSocket(PORT);
-        getUsers();
         clientConnectionLoop();
     }
     
@@ -25,9 +24,9 @@ public class Server {
         while(true) {
             ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
             clients.add(clientSocket);
-            
             //System.out.println(users.add(clientSocket.getClient(clientQuantity))); Erro 
             clientQuantity ++;
+            getUsers();
             connectedUsers();
             new Thread(() -> {
                 try {

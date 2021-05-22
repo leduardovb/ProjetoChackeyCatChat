@@ -28,11 +28,11 @@ public class UserDAO {
     }
     
     public boolean getUserAndPassword(String user , String password) {
-        Connection con = ConnectionFactory.getConnection(); 
+        Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
         
         try {
-            Statement stmt = null;
-            ResultSet resultSet = null;
             stmt = con.createStatement();
             resultSet = stmt.executeQuery("SELECT USUARIO_LOGIN , USUARIO_SENHA FROM USUARIO WHERE USUARIO_LOGIN = '" + user + "' AND USUARIO_SENHA = '" + password + "'");
             
@@ -46,6 +46,8 @@ public class UserDAO {
             return us.equals(user) && pa.equals(password);
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, resultSet);
         }
         
         return false;
@@ -53,11 +55,12 @@ public class UserDAO {
     
     public boolean isAlreadyUser(String user) {
         Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
         
         try {
-            Statement stmt;
             stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery("SELECT USUARIO_LOGIN FROM USUARIO WHERE USUARIO_LOGIN = '" + user + "'");
+            resultSet = stmt.executeQuery("SELECT USUARIO_LOGIN FROM USUARIO WHERE USUARIO_LOGIN = '" + user + "'");
             
             String rs = null;
             
@@ -68,6 +71,8 @@ public class UserDAO {
             return rs == null;
         } catch (SQLException ex) {
             System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, resultSet);
         }
         
         return false;
@@ -84,30 +89,99 @@ public class UserDAO {
     public ArrayList getUsers() {
         ArrayList<User> users = new ArrayList<>();
         Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
         
         try {
-            Statement stmt;
             stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery("SELECT ID_USUARIO, NICK FROM USUARIO");
+            resultSet = stmt.executeQuery("SELECT ID_USUARIO, NICK , USER_STATUS FROM USUARIO");
             
             Integer idUser;
             String nick;
+            Boolean status;
             
             while(resultSet.next()) {
                 User user = new User();
                 idUser = resultSet.getInt("ID_USUARIO");
                 nick = resultSet.getString("NICK");
+                status = resultSet.getBoolean("USER_STATUS");
                 
                 user.setUserId(idUser);
                 user.setUserNick(nick);
-                user.setStatus(false);
+                user.setStatus(status);
                 
                 users.add(user);
             }
         } catch(SQLException ex) {
             System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, resultSet);
         }
         
         return users;
+    }
+    
+    public User getUser(String username , String password) {
+        Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
+        
+        try {   
+            stmt = con.createStatement();
+            resultSet = stmt.executeQuery("SELECT ID_USUARIO , NICK , USUARIO_LOGIN , USUARIO_SENHA FROM USUARIO WHERE USUARIO_LOGIN = '" + username + "' AND USUARIO_SENHA = '" + password + "'");
+            
+            String nick = "" , userLogin = "" , userPass = "";
+            Integer userId = 0;
+            
+            while(resultSet.next()) {
+                nick = resultSet.getString("NICK");
+                userLogin = resultSet.getString("USUARIO_LOGIN");
+                userPass = resultSet.getString("USUARIO_SENHA");
+                userId = resultSet.getInt("ID_USUARIO");
+            }
+            
+            User user = new User(userId , userLogin , userPass , nick , true);
+            
+            setStatusOn(user.getUserId());
+            
+            return user;
+            
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con , stmt , resultSet);
+        }
+        return null;
+    }
+    
+    public void setStatusOn(Integer id) {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("UPDATE USUARIO SET USER_STATUS = 1 WHERE ID_USUARIO = '" + id +"'");
+            
+            stmt.executeUpdate();
+            System.out.println("Usuario Online");
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void setStatusOff(Integer id) {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("UPDATE USUARIO SET USER_STATUS = 0 WHERE ID_USUARIO = '" + id +"'");
+            stmt.executeUpdate();
+            System.out.println("Usuario Offline");
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
     }
 }

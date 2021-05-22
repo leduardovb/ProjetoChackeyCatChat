@@ -11,7 +11,8 @@ public class User {
         
     }
     
-    public User(String userLogin, String userPassword, String userNick , Boolean status) {
+    public User(Integer userId , String userLogin, String userPassword, String userNick , Boolean status) {
+        this.userId = userId;
         this.userLogin = userLogin;
         this.userPassword = userPassword;
         this.userNick = userNick;

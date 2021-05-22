@@ -1,6 +1,9 @@
 package view;
 
+import entities.Client;
+import java.io.IOException;
 import javax.swing.JOptionPane;
+import model.bean.User;
 import model.dao.UserDAO;
 
 public class LoginUsuario extends javax.swing.JFrame {
@@ -171,6 +174,15 @@ public class LoginUsuario extends javax.swing.JFrame {
        
         if(ctl.getUserAndPassword(user, password)){
            JOptionPane.showMessageDialog(null, "Login aceito" , "Login" , JOptionPane.INFORMATION_MESSAGE);
+           
+           User us = ctl.getUser(user, password);
+           
+           Client client = new Client(us);
+            try {
+                client.start();
+            } catch (IOException ex) {
+                System.out.println("Erro: " + ex);;
+            }
         }
         else{
            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorreto" , "Erro" , JOptionPane.ERROR_MESSAGE);

@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.JOptionPane;
 import model.bean.User;
+import model.dao.UserDAO;
 
 public class Client implements Runnable{
     private ClientSocket clientSocket;
@@ -28,8 +29,8 @@ public class Client implements Runnable{
             messageLoop(clientSocket);
         } finally {
             clientSocket.close();
-        }
-          
+            close();
+        }    
     }
     
     private void messageLoop(ClientSocket clientSocket) {
@@ -38,7 +39,7 @@ public class Client implements Runnable{
         do {
             msg = JOptionPane.showInputDialog(null, this.nick);
             clientSocket.sendMsg(msg);
-            System.out.println("Eu: " + msg);
+            System.out.println(user.getUserNick() +": " + msg);
         } while(!msg.equalsIgnoreCase("close")); 
     }
     
@@ -52,7 +53,13 @@ public class Client implements Runnable{
     }
     
     public void setNick() {
-        this.nick = JOptionPane.showInputDialog(null , "Nick");
+        this.nick = user.getUserNick();
+    }
+    
+    public void close() {
+        UserDAO userDAO = new UserDAO();
+        
+        userDAO.setStatusOff(user.getUserId());
     }
     
     public static void main(String[] args) {
