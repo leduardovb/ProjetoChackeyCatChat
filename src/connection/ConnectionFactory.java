@@ -19,7 +19,7 @@ public class ConnectionFactory {
         try{
             Class.forName(DRIVER);
             return DriverManager.getConnection(URL , dataBaseUserName , dataBasePassword);    
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (ClassNotFoundException | SQLException | RuntimeException ex) {
             throw new RuntimeException("Erro: " + ex);
         }
     }
