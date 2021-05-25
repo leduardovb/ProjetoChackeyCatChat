@@ -2,7 +2,9 @@ package view;
 
 import entities.Client;
 import java.io.IOException;
+import java.util.ArrayList;
 import model.bean.User;
+import model.dao.UserDAO;
 
 public class TelaPrincipalChat extends javax.swing.JFrame {
     private User user;
@@ -11,8 +13,10 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
     public TelaPrincipalChat(Client client) {
         this.client = client;
         this.user = client.getUser();
+
         initComponents();
         this.setVisible(true);
+        
         try {
             client.start();
         } catch(IOException ex) {
@@ -20,6 +24,9 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
         }
     }
     
+    private User getUser() {
+        return this.user;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -28,12 +35,12 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(33, 37, 38));
@@ -81,32 +88,15 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(49, 55, 56));
         jPanel1.setPreferredSize(new java.awt.Dimension(440, 438));
 
-        jList1.setBackground(new java.awt.Color(102, 102, 102));
-        jList1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        jList1.setForeground(new java.awt.Color(240, 240, 240));
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jList1.setSelectionBackground(new java.awt.Color(51, 51, 51));
-        jScrollPane1.setViewportView(jList1);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addGap(247, 247, 247))
+            .addGap(0, 420, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 62, Short.MAX_VALUE))
+            .addGap(0, 420, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 420, 420));
@@ -144,15 +134,28 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(102, 102, 102));
 
+        jList1.setBackground(new java.awt.Color(102, 102, 102));
+        jList1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        jList1.setForeground(new java.awt.Color(240, 240, 240));
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = new UserDAO().getUsersName(getUser());
+
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jList1.setSelectionBackground(new java.awt.Color(51, 51, 51));
+        jScrollPane1.setViewportView(jList1);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 110, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 110, 360));

@@ -112,13 +112,15 @@ public class UserDAO {
                 
                 users.add(user);
             }
+            
+            return users;
         } catch(SQLException ex) {
             System.out.println("Erro: " + ex);
         } finally {
             ConnectionFactory.closeConnection(con, stmt, resultSet);
         }
         
-        return users;
+        return null;
     }
     
     public User getUser(String username , String password) {
@@ -228,5 +230,41 @@ public class UserDAO {
         } finally {
             ConnectionFactory.closeConnection(con, stmt);
         }
+    }
+    
+        public String[] getUsersName(User user) {
+        ArrayList<String> usersName = new ArrayList<>();
+        Connection con = ConnectionFactory.getConnection();
+        Statement stmt = null;
+        ResultSet resultSet = null;
+        
+        try {
+            stmt = con.createStatement();
+            resultSet = stmt.executeQuery("SELECT NICK FROM USUARIO WHERE ID_USUARIO != '"+ user.getUserId()+"'");
+            
+            String nick;
+            int cont = 0;
+            
+            while(resultSet.next()) {
+                nick = resultSet.getString("NICK");
+                
+                usersName.add(nick);
+                cont ++;
+            }
+            
+            String[] names = new String[cont];
+            
+            for (int i = 0; i < cont; i ++) {
+                names[i] = usersName.get(i);
+            }
+            
+            return names;
+        } catch(SQLException ex) {
+            System.out.println("Erro: " + ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, resultSet);
+        }
+        
+        return null;
     }
 }

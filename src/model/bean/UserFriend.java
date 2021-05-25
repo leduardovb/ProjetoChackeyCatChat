@@ -5,6 +5,16 @@ public class UserFriend {
     private Integer userFriendId;
     private Boolean status;
 
+    public UserFriend() {
+        
+    }
+    
+    public UserFriend(Integer userId, Integer userFriendId, Boolean status) {
+        this.userId = userId;
+        this.userFriendId = userFriendId;
+        this.status = status;
+    }
+    
     public Integer getUserId() {
         return userId;
     }
