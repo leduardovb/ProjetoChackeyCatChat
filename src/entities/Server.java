@@ -128,7 +128,7 @@ public class Server {
         
         userDAO.clientConnected(onlineUsers.get(clientQuantity - 1).getUserId());
     }
-    
+    /*
     public static void main(String[] args) {
         try {
             Server server = new Server();
@@ -136,5 +136,5 @@ public class Server {
         } catch (IOException ex) {
             System.out.println("Servidor Fechado");
         }
-    }
+    }*/
 }

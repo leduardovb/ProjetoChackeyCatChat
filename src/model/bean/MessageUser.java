@@ -1,9 +1,9 @@
 package model.bean;
 
 public class MessageUser {
-    Integer messageId;
-    Integer senderUserId;
-    Integer addresseeUserId;
+    private Integer messageId;
+    private Integer senderUserId;
+    private Integer addresseeUserId;
 
     public MessageUser() {
         

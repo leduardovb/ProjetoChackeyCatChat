@@ -67,7 +67,7 @@ public class Client implements Runnable{
     public User getUser(){
         return this.user;
     }
-    
+    /*
     public static void main(String[] args) {
         try{
             User user = new User();
@@ -77,5 +77,5 @@ public class Client implements Runnable{
         } catch(IOException e) {
             System.out.println("Erro cliente: " + e);
         }       
-    }
+    }*/
 }

@@ -2,13 +2,20 @@ package view;
 
 import entities.Client;
 import java.io.IOException;
-import java.util.ArrayList;
 import model.bean.User;
 import model.dao.UserDAO;
 
 public class TelaPrincipalChat extends javax.swing.JFrame {
     private User user;
     private Client client;
+    TelaChat telaChat;
+    
+    public TelaPrincipalChat(User user) {
+        this.user = user;
+        this.telaChat = new TelaChat(user);
+        initComponents();
+        this.setVisible(true);
+    }
     
     public TelaPrincipalChat(Client client) {
         this.client = client;
@@ -39,7 +46,6 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -143,19 +149,29 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jList1.setSelectionBackground(new java.awt.Color(51, 51, 51));
-        jScrollPane1.setViewportView(jList1);
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.setSelectionBackground(new java.awt.Color(240, 240, 240));
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(jList1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(jList1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 110, 360));
@@ -167,13 +183,23 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
         System.exit(0);
     }//GEN-LAST:event_jLabel1MousePressed
-    /*
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            new TelaPrincipalChat().setVisible(true);
-        });
-    }*/
 
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        String userChat = jList1.getSelectedValue();
+        boolean vis = telaChat.isVisible();
+        telaChat.createNewChat(userChat);
+        
+        if(!vis)
+        { 
+            telaChat.setVisible(true);
+        }
+    }//GEN-LAST:event_jList1ValueChanged
+   
+    public static void main(String[] args) {
+        User user1 = new User(2 , "maria" , "85453" , "safira" , true);
+        TelaPrincipalChat tc = new TelaPrincipalChat(user1);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -184,6 +210,5 @@ public class TelaPrincipalChat extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
