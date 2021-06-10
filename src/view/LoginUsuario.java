@@ -1,6 +1,5 @@
 package view;
 
-import entities.Client;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import model.bean.User;
@@ -56,9 +55,9 @@ public class LoginUsuario extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(240, 240, 240));
         jLabel2.setText("Senha");
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
+        jButton1.setBackground(new java.awt.Color(255, 102, 0));
         jButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(204, 102, 0));
+        jButton1.setForeground(new java.awt.Color(240, 240, 240));
         jButton1.setText("LOGAR");
         jButton1.setBorder(null);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -146,8 +145,8 @@ public class LoginUsuario extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel1)
-                                        .addComponent(jTextUser)
-                                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)))))
+                                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                                        .addComponent(jTextUser)))))
                         .addGap(0, 43, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
@@ -210,10 +209,9 @@ public class LoginUsuario extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(null, "Login aceito" , "Login" , JOptionPane.INFORMATION_MESSAGE);
            
            User us = ctl.getUser(user, password);
-           Client client = new Client(us);
-          
+
            this.dispose();
-           TelaPrincipalChat telaPrinc = new TelaPrincipalChat(client); 
+           TelaPrincipalChat telaPrinc = new TelaPrincipalChat(us); 
         }
         else{
            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorreto" , "Erro" , JOptionPane.ERROR_MESSAGE);

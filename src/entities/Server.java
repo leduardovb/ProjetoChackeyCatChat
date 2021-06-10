@@ -11,9 +11,8 @@ public class Server {
     public static final int PORT = 5555;
     private static int clientQuantity = 0;
     private ServerSocket serverSocket;
-    private final ArrayList<ClientSocket> clients = new ArrayList<>();
+    private ArrayList<ClientSocket> clients = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
-    private ArrayList<User> onlineUsers = new ArrayList<>();
     
     public void start() throws IOException {
         System.out.println("Servidor iniciado na porta: " + PORT);
@@ -25,32 +24,34 @@ public class Server {
         while(true) {
             try{
                 ClientSocket clientSocket = new ClientSocket(serverSocket.accept());
+                System.out.println("SERVIDOR OK");
                 clients.add(clientSocket);
                 clientQuantity ++;
                 getUsers();
-                connectedUsers();
-                onlineUsers.add(getOnlineUser());
-                clientConnected();
+                //connectedUsers();
                 new Thread(() -> {
                     try {
-                        int pos = getPosicao(clientSocket);
-                        clientMessageLoop(clientSocket , pos);
+                        clientMessageLoop(clientSocket);
                     } catch (IOException ex) {
                         System.out.println("Erro: " + ex);
                     }
                 }).start();
+                System.out.println("S - OK");
             } catch(IOException ex) {
                     System.out.println("Erro: " + ex);
             }
         }
     }
     
-    private void clientMessageLoop(ClientSocket clientSocket , int pos) throws IOException {
+    private void clientMessageLoop(ClientSocket clientSocket) throws IOException {
         String msg;
         try{
             while((msg = clientSocket.getMessage()) != null){
+                String userSender = msg.substring(0, msg.indexOf(":"));
+                String userMsg = msg.substring(msg.indexOf(":") + 2 , msg.length());
+                
                 if(!msg.equalsIgnoreCase("close")){
-                    System.out.printf("%s: %s\n" , onlineUsers.get(getPosicao(clientSocket)).getUserNick() , msg);
+                    System.out.printf("%s: %s\n" , userSender , userMsg);
                     sendMsgToAll(clientSocket , msg);
                 }
                 else{
@@ -58,7 +59,6 @@ public class Server {
                 }
             }
         } finally{
-            clientRemove(clientSocket);
             clientSocket.close(); 
             clientQuantity --;
         }
@@ -68,21 +68,19 @@ public class Server {
         serverSocket.close();
     }
     
-    private int getPosicao(ClientSocket clientSocket) {
-        return clients.indexOf(clientSocket);
-    } 
-    
     private void sendMsgToAll(ClientSocket sender , String msg) {
         Iterator<ClientSocket> iterator = clients.iterator();
         
         while(iterator.hasNext()) {
             ClientSocket clientSocket = iterator.next();
             
+            clientSocket.sendMsg(msg);
+            System.out.println("MESSAGE - OK");/*
             if(!clientSocket.equals(sender)) {
-                if(!clientSocket.sendMsg(onlineUsers.get(getPosicao(sender)).getUserNick() + ": " + msg)){
+                if(!clientSocket.sendMsg(msg)){
                     iterator.remove();
                 }
-            }
+            }*/
         }
     }
     
@@ -109,26 +107,7 @@ public class Server {
             System.out.println("Status: " + status);
         }
     }
-    
-    private User getOnlineUser() {
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.getOnlineUser();
-        
-        return user;
-    }
-    
-    private void clientRemove(ClientSocket clientSocket) {
-        onlineUsers.remove(getPosicao(clientSocket));
-        clients.remove(clientSocket);
-    }
-    
-    
-    private void clientConnected() {
-        UserDAO userDAO = new UserDAO();
-        
-        userDAO.clientConnected(onlineUsers.get(clientQuantity - 1).getUserId());
-    }
-    /*
+       
     public static void main(String[] args) {
         try {
             Server server = new Server();
@@ -136,5 +115,5 @@ public class Server {
         } catch (IOException ex) {
             System.out.println("Servidor Fechado");
         }
-    }*/
+    }
 }

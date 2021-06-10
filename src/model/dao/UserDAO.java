@@ -186,37 +186,6 @@ public class UserDAO {
         }
     }
     
-    public User getOnlineUser() {
-        Connection con = ConnectionFactory.getConnection();
-        Statement stmt = null;
-        ResultSet resultSet = null;
-        
-        try {
-            stmt = con.createStatement();
-            resultSet = stmt.executeQuery("SELECT ID_USUARIO , NICK , USUARIO_LOGIN , USUARIO_SENHA FROM USUARIO WHERE ONLINE_SERVIDOR = 1");
-            
-            String nick = "" , userLogin = "" , userPassword = "";
-            Integer userId = 0;
-            
-            while(resultSet.next()) {
-                userId = resultSet.getInt("ID_USUARIO");
-                nick = resultSet.getString("NICK");
-                userLogin = resultSet.getString("USUARIO_LOGIN");
-                userPassword = resultSet.getString("USUARIO_SENHA");
-            }
-            
-            User user = new User(userId , userLogin , userPassword , nick , true);
-            
-            return user;
-        } catch(SQLException ex) {
-            System.out.println("Erro: " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt, resultSet);
-        }
-        
-        return null;
-    }
-    
     public void clientConnected(Integer id) {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -232,7 +201,7 @@ public class UserDAO {
         }
     }
     
-        public String[] getUsersName(User user) {
+    public String[] getUsersName(User user) {
         ArrayList<String> usersName = new ArrayList<>();
         Connection con = ConnectionFactory.getConnection();
         Statement stmt = null;
